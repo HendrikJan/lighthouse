@@ -46,6 +46,45 @@ class BelongsToManyDirectiveTest extends DBTestCase
         $this->be($this->user);
     }
 
+    public function testCanQueryBelongsToManyWithPivot(): void
+    {        
+        $this->schema = '
+        type User {
+            roles: [RoleWithPivot!]! @belongsToMany
+        }
+        
+        type RoleWithPivot {
+            id: Int!
+            name: String!
+            meta: String! #pivot data
+        }
+        
+        type Query {
+            user(id: ID! @eq): User @find
+        }
+        ';
+
+        $this->graphQL('
+        {
+            user(id: 1) {
+                roles {
+                    id
+                    name
+                    meta
+                }
+            }
+        }
+        ')->assertJson([
+            'data' => [
+                'user' => [
+                    'roles' => [
+                        'meta' => 'new',
+                    ],
+                ],
+            ],
+        ]);
+    }
+
     public function testCanQueryBelongsToManyRelationship(): void
     {
         $this->schema = '
