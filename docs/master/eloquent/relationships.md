@@ -111,6 +111,23 @@ type Role {
 }
 ```
 
+And including fields from the pivot table can be done like this.
+
+```graphql
+type UserRolePivot {
+    meta: String
+}
+
+type RoleWithPivot {
+    id: ID!
+    pivot: UserRolePivot
+}
+
+type User {
+  roles: [RoleWithPivot!]! @belongsToMany
+}
+```
+
 ## Renaming relations
 
 When you define a relation, Lighthouse assumes that the field and the relationship
