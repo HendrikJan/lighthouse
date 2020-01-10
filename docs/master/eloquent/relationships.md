@@ -111,7 +111,7 @@ type Role {
 }
 ```
 
-And including fields from the pivot table can be done like this.
+And including fields from the pivot table can be done by defining the pivot attribute.
 
 ```graphql
 type UserRolePivot {
